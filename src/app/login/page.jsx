@@ -1,4 +1,5 @@
 "use client";
+
 import {
 	Button,
 	Text,
@@ -17,6 +18,7 @@ import {
 } from "@chakra-ui/react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { useState } from "react";
+import { signIn } from "next-auth/react";
 
 const Login = () => {
 	const [showPassword, setShowPassword] = useState(false);
@@ -125,7 +127,7 @@ const Login = () => {
 								<Text>or</Text>
 							</AbsoluteCenter>
 						</Box>
-						<Button variant={"outline"} size={"lg"} borderRadius="10">
+						<Button variant={"outline"} size={"lg"} borderRadius="10" onClick={() => signIn('google')}>
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
 								x="0px"
