@@ -1,9 +1,10 @@
 import { getApp, getApps, initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
+import { getDatabase } from "firebase/database";
 import { getFirestore, } from 'firebase/firestore';
 
 const firebaseConfig = {
-    apiKey: process.env.APP_KEY,
+    apiKey: process.env.API_KEY,
     authDomain: process.env.AUTH_DOMAIN,
     projectId: process.env.PROJECT_ID,
     storageBucket: process.env.STORAGE_BUCKET,
@@ -15,7 +16,8 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
-const db = getFirestore();
+const firestoreDb = getFirestore();
+const db = getDatabase();
 const auth = getAuth();
 
-export { app, db, auth }
+export { app, firestoreDb, auth, db }
