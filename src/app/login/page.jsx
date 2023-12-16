@@ -17,11 +17,51 @@ import {
 	AbsoluteCenter,
 } from "@chakra-ui/react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
+import { useRouter } from 'next/navigation';
 import { useState } from "react";
 import { signIn } from "next-auth/react";
+import Swal from 'sweetalert2'
 
 const Login = () => {
+	const [email, setEmail] = useState('');
+	const [password, setPassword] = useState('');
 	const [showPassword, setShowPassword] = useState(false);
+	const router = useRouter()
+
+	const handleCredentialLogin = () => {
+		signIn('credentials', { email, password, redirect: false })
+			.then(({ ok, error }) => {
+				if (ok) {
+					router.push("/dashboard");
+				} else {
+					let errorMessage = ''
+
+					switch (error) {
+						case 'CredentialsSignin':
+							errorMessage = 'Invalid Credentials'
+							break
+						default:
+							errorMessage = error
+							break
+					}
+
+					Swal.fire({
+						title: 'Error!',
+						text: errorMessage,
+						icon: 'error',
+						confirmButtonText: 'Cool'
+					})
+				}
+			})
+			.catch(error => {
+				Swal.fire({
+					title: 'Server Error',
+					text: error.message,
+					icon: 'error',
+					confirmButtonText: 'Cool'
+				})
+			})
+	}
 
 	return (
 		<Stack direction={{ base: "column", md: "row" }} gap={0}>
@@ -67,11 +107,13 @@ const Login = () => {
 							type="email"
 							borderRadius="10"
 							placeholder="Email"
+							onChange={(e) => setEmail(e.target.value)}
 						/>
 					</FormControl>
 					<FormControl id="password" isRequired textAlign={"right"}>
 						<InputGroup>
 							<Input
+								onChange={(e) => setPassword(e.target.value)}
 								size="lg"
 								type={showPassword ? "text" : "password"}
 								borderRadius="10"
@@ -112,6 +154,7 @@ const Login = () => {
 							borderRadius="10"
 							marginTop={"2rem"}
 							type="submit"
+							onClick={handleCredentialLogin}
 						>
 							Login
 						</Button>
