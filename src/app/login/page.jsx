@@ -17,11 +17,51 @@ import {
 	AbsoluteCenter,
 } from "@chakra-ui/react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { signIn } from "next-auth/react";
+import Swal from "sweetalert2";
 
 const Login = () => {
+	const [email, setEmail] = useState("");
+	const [password, setPassword] = useState("");
 	const [showPassword, setShowPassword] = useState(false);
+	const router = useRouter();
+
+	const handleCredentialLogin = () => {
+		signIn("credentials", { email, password, redirect: false })
+			.then(({ ok, error }) => {
+				if (ok) {
+					router.push("/dashboard");
+				} else {
+					let errorMessage = "";
+
+					switch (error) {
+						case "CredentialsSignin":
+							errorMessage = "Invalid Credentials";
+							break;
+						default:
+							errorMessage = error;
+							break;
+					}
+
+					Swal.fire({
+						title: "Error!",
+						text: errorMessage,
+						icon: "error",
+						confirmButtonText: "Ok",
+					});
+				}
+			})
+			.catch((error) => {
+				Swal.fire({
+					title: "Server Error",
+					text: error.message,
+					icon: "error",
+					confirmButtonText: "Ok",
+				});
+			});
+	};
 
 	return (
 		<Stack direction={{ base: "column", md: "row" }} gap={0}>
@@ -40,7 +80,7 @@ const Login = () => {
 				/>
 			</Box>
 			<Box w={["full", "full", "50vw"]}>
-				<Stack
+				<Stack as={'form'}
 					spacing={6}
 					align={"center"}
 					my={{ base: 6, "2xl": 8 }}
@@ -67,11 +107,13 @@ const Login = () => {
 							type="email"
 							borderRadius="10"
 							placeholder="Email"
+							onChange={(e) => setEmail(e.target.value)}
 						/>
 					</FormControl>
 					<FormControl id="password" isRequired textAlign={"right"}>
 						<InputGroup>
 							<Input
+								onChange={(e) => setPassword(e.target.value)}
 								size="lg"
 								type={showPassword ? "text" : "password"}
 								borderRadius="10"
@@ -112,6 +154,7 @@ const Login = () => {
 							borderRadius="10"
 							marginTop={"2rem"}
 							type="submit"
+							onClick={handleCredentialLogin}
 						>
 							Login
 						</Button>
@@ -127,7 +170,14 @@ const Login = () => {
 								<Text>or</Text>
 							</AbsoluteCenter>
 						</Box>
-						<Button variant={"outline"} size={"lg"} borderRadius="10" onClick={() => signIn('google')}>
+						<Button
+							variant={"outline"}
+							size={"lg"}
+							borderRadius="10"
+							onClick={() =>
+								signIn("google", { redirect: true, callbackUrl: "/dashboard" })
+							}
+						>
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
 								x="0px"
@@ -152,7 +202,7 @@ const Login = () => {
 									fill="#1976D2"
 									d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"
 								></path>
-							</svg>
+							</svg>{" "}
 							Sign in with Google
 						</Button>
 					</Stack>
