@@ -127,7 +127,7 @@ const Login = () => {
 								<Text>or</Text>
 							</AbsoluteCenter>
 						</Box>
-						<Button variant={"outline"} size={"lg"} borderRadius="10" onClick={() => signIn('google')}>
+						<Button variant={"outline"} size={"lg"} borderRadius="10" onClick={() => signIn('google', { redirect: true, callbackUrl: '/dashboard' })}>
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
 								x="0px"
