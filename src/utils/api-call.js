@@ -15,3 +15,10 @@ export const verifyUserRole = async (email) => {
         })
     })
 }
+
+export const getBus = async () => {
+    const url = process.env.WRAPPER_URL + apiUri['bus-list']
+
+    const response = await dataFetcher(url, [])
+    return response
+}

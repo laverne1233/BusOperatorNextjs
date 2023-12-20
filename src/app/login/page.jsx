@@ -1,5 +1,7 @@
 "use client";
 
+import { Link } from "@chakra-ui/next-js";
+
 import {
 	Button,
 	Text,
@@ -9,7 +11,6 @@ import {
 	Stack,
 	Image,
 	Divider,
-	Link,
 	InputGroup,
 	Circle,
 	InputRightElement,
@@ -18,27 +19,38 @@ import {
 } from "@chakra-ui/react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { signIn } from "next-auth/react";
+import { useEffect, useState } from "react";
+import { signIn, useSession } from "next-auth/react";
 import Swal from "sweetalert2";
 
 const Login = () => {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [showPassword, setShowPassword] = useState(false);
+	const [isLoggedIn, setIsLoggedIn] = useState(false)
 	const router = useRouter();
 
-	const handleCredentialLogin = () => {
+	useEffect(() => {
+		router.refresh()
+		if (isLoggedIn) {
+			router.push('/dashboard')
+		}
+	})
+
+	const handleCredentialLogin = (event) => {
+		event.preventDefault()
 		signIn("credentials", { email, password, redirect: false })
 			.then(({ ok, error }) => {
 				if (ok) {
-					router.push("/dashboard");
+					setIsLoggedIn(true)
 				} else {
 					let errorMessage = "";
-
 					switch (error) {
 						case "CredentialsSignin":
 							errorMessage = "Invalid Credentials";
+							break;
+						case "UNVERIFIED_USER":
+							errorMessage = 'Account still unverified'
 							break;
 						default:
 							errorMessage = error;
@@ -110,7 +122,7 @@ const Login = () => {
 							onChange={(e) => setEmail(e.target.value)}
 						/>
 					</FormControl>
-					<FormControl id="password" isRequired textAlign={"right"}>
+					<FormControl id="password" isRequired textalign={"right"}>
 						<InputGroup>
 							<Input
 								onChange={(e) => setPassword(e.target.value)}

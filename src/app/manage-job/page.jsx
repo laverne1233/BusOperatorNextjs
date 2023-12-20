@@ -1,12 +1,13 @@
+
 "use client"
 import { Heading } from "@chakra-ui/react";
 
 const Page = () => {
-	return (
-		<>
-			<Heading>Sample main dashboard</Heading>
-		</>
-	);
+    return (
+        <>
+            <Heading>Manage Job Page</Heading>
+        </>
+    );
 };
 
 export default Page;

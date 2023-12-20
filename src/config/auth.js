@@ -18,7 +18,7 @@ export const config = {
               return userCredential.user;
             }
 
-            return null;
+            throw new Error('UNVERIFIED_USER')
           })
           .catch((error) => {
             const errorCode = error.code;
@@ -45,18 +45,25 @@ export const config = {
   callbacks: {
     async signIn({ account, profile, user }) {
       try {
-        const data = await verifyUserRole(user.email)
-        console.log(data)
-        if (!data.success) {
+        const response = await verifyUserRole(user.email)
+        if (!response.success) {
           return false
         }
-
+        user = { ...user, uid: response.user.uid }
         return user
       } catch (e) {
+        console.log(e.message)
         return false
       }
     },
+    async session({ session, token, user }) {
+      const response = await verifyUserRole(session.user.email)
+      if (response.success) {
+        session.user.uid = response.user.uid
+      }
 
+      return session
+    },
     async redirect({ url, baseUrl }) {
       if (await getServerSession() && (url == baseUrl + '/login' || url == baseUrl + '/register')) {
         return baseUrl

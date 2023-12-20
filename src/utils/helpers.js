@@ -6,5 +6,6 @@ export const setAppTitle = (content) => {
 
 export const dataFetcher = async (url, options) => {
     const response = await fetch(url, options)
-    return await response.json()
+    const data = await response.json()
+    return data
 }

@@ -2,11 +2,11 @@
 import { Heading } from "@chakra-ui/react";
 
 const Page = () => {
-	return (
-		<>
-			<Heading>Sample main dashboard</Heading>
-		</>
-	);
+    return (
+        <>
+            <Heading>Manage People Page</Heading>
+        </>
+    );
 };
 
 export default Page;
