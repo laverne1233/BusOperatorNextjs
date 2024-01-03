@@ -1,10 +1,21 @@
 'use client'
-import React from 'react'
+import React, { useEffect } from 'react'
 import Link from "next/link"
 import PrelineScript from "@/components/PrelineScript"
 import { usePathname } from 'next/navigation';
+import { useUserStore } from '@/store';
 
 export default function BusOperatorLayout({ children }) {
+    const { resetUser } = useUserStore()
+    console.log(resetUser)
+    const user = useUserStore((state) => state.user)
+
+    useEffect(() => {
+        if (!Object.keys(user).length) {
+            window.location.href = '/auth/login'
+        }
+    })
+
     const pathname = usePathname()
     const isActiveNav = (uri) => {
         return pathname == '/bus-operator' + uri ?
@@ -99,12 +110,12 @@ export default function BusOperatorLayout({ children }) {
                                 <hr className="border border-gray-500 w-full" />
 
                                 <li>
-                                    <Link className={isActiveNav('/buses')} href="#">
+                                    <button type='button' className={isActiveNav('/logout')} onClick={resetUser}>
                                         <svg className="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" strokeWidth={1.5} fill="none" viewBox="0 0 24 24">
                                             <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" d="M4 8h11m0 0-4-4m4 4-4 4m-5 3H3a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h3" />
                                         </svg>
                                         Logout
-                                    </Link>
+                                    </button>
                                 </li>
                             </ul>
                         </nav>

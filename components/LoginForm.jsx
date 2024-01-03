@@ -1,20 +1,18 @@
-'use client'
 
+'use client'
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { useUserStore } from '@/store';
+import { useRouter } from 'next/router';
 
-const Login = () => {
-    const userState = useUserStore()
+const LoginForm = () => {
+    const router = useRouter()
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
 
     const handleCredentialLogin = () => {
-        userState.setUser({ name: 'Sample User' })
-        window.location.href = '/bus-operator'
+        router.push('/')
     }
-
 
     return (
         <>
@@ -94,4 +92,4 @@ const Login = () => {
     );
 };
 
-export default Login;
+export default LoginForm;
