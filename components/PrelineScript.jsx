@@ -9,7 +9,9 @@ export default function PrelineScript() {
     const path = usePathname();
 
     useEffect(() => {
-        import("preline/preline");
+        setTimeout(() => {
+            import("preline/preline");
+        }, 1000)
     }, []);
 
     useEffect(() => {
