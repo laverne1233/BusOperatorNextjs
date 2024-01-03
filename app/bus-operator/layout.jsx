@@ -2,12 +2,12 @@
 import React, { useEffect } from 'react'
 import Link from "next/link"
 import PrelineScript from "@/components/PrelineScript"
+import { AppProgressBar as ProgressBar } from 'next-nprogress-bar';
 import { usePathname } from 'next/navigation';
 import { useUserStore } from '@/store';
 
 export default function BusOperatorLayout({ children }) {
     const { resetUser } = useUserStore()
-    console.log(resetUser)
     const user = useUserStore((state) => state.user)
 
     useEffect(() => {
@@ -26,6 +26,7 @@ export default function BusOperatorLayout({ children }) {
 
     return (
         <>
+            <ProgressBar />
             <div className="flex flex-col md:flex-row">
                 <div className="w-full md:w-1/6 bg-purple-default h-screen overflow-y-auto scroll-m-px scroll-p-px">
                     <div className="flex flex-col gap-2 p-5">
