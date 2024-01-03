@@ -9,9 +9,26 @@ const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
 
-    const handleCredentialLogin = () => {
-        userState.setUser({ name: 'Sample User' })
+    const handleCredentialLogin = async () => {
+        const response = await fetch(process.env.BE_URL + '/auth/login', {
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            method: 'POST',
+            body: JSON.stringify()
+        })
+
+        const result = await response.json()
+
+        if (!response.success) {
+            setErrorMessage(result.message.replace('_', ' '))
+            return
+        }
+
+        setErrorMessage('')
+        userState.setUser(result.data)
         window.location.href = '/bus-operator'
     }
 
@@ -20,7 +37,7 @@ const Login = () => {
         <>
             <div className='flex items-center justify-center h-screen'>
                 <div className="bg-white border shadow-sm rounded-xl dark:bg-slate-900 dark:border-gray-700 dark:shadow-slate-700/[.7] p-4 w-1/2 ">
-                    <div className='flex flex-col gap-16'>
+                    <div className='flex flex-col gap-10'>
                         <section className='flex flex-col items-center'>
                             <div className=" overflow-y-auto p-4 md:p-5 ">
                                 <div className="rounded-full bg-gray-700 text-white flex items-center justify-center w-16 h-16">
@@ -31,10 +48,11 @@ const Login = () => {
                             <p className="text-lg text-center">Enter your account</p>
                         </section>
                         <section className='flex flex-col gap-4 mx-5 px-5'>
-                            <input type="text" id="email" name="email" className="py-3 px-4 pr-11 block w-full border-gray-200 shadow-sm rounded-lg text-sm focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600" placeholder="Email" />
+                            {errorMessage && <p className='text-center text-red-500 text-base'>{errorMessage}</p>}
+                            <input type="email" id="email" name="email" className="py-3 px-4 pr-11 block w-full border-gray-200 shadow-sm rounded-lg text-sm focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600" placeholder="Email" onChange={((e) => setEmail(e.target.value))} />
 
                             <div className="relative">
-                                <input type={showPassword ? "text" : "password"} id="password" name="password" className="py-3 px-4 pr-11 block w-full border-gray-200 shadow-sm rounded-lg text-sm focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600" placeholder="Password" />
+                                <input type={showPassword ? "text" : "password"} id="password" name="password" className="py-3 px-4 pr-11 block w-full border-gray-200 shadow-sm rounded-lg text-sm focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600" placeholder="Password" onChange={((e) => setPassword(e.target.value))} />
                                 <button
                                     className="absolute inset-y-0 end-0 flex items-center pointer-events-auto z-20 pr-4"
                                     onClick={() => setShowPassword((showPassword) => !showPassword)}

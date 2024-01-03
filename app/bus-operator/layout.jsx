@@ -8,10 +8,10 @@ import { useUserStore } from '@/store';
 
 export default function BusOperatorLayout({ children }) {
     const { resetUser } = useUserStore()
-    const user = useUserStore((state) => state.user)
+    const userStore = useUserStore((state) => state.user)
 
     useEffect(() => {
-        if (!Object.keys(user).length) {
+        if (!Object.keys(userStore).length) {
             window.location.href = '/auth/login'
         }
     })
@@ -38,7 +38,7 @@ export default function BusOperatorLayout({ children }) {
                                 src="https://images.unsplash.com/photo-1607424064879-708250e57647?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
                             />
                             <div className="flex flex-col gap-1 items-center">
-                                <p className="text-sm font-bold text-white">Bus Operator Name</p>
+                                <p className="text-sm font-bold text-white">{userStore?.user?.display_name}</p>
                                 <p className="text-xs text-white">Bus Operator</p>
                             </div>
                         </div>
