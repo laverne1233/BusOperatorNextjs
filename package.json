@@ -10,6 +10,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@preline/overlay": "^2.0.2",
     "next": "14.0.4",
     "preline": "^2.0.3",
     "react": "^18",
