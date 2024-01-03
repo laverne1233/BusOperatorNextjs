@@ -121,7 +121,7 @@ export default function BusOperatorLayout({ children }) {
                         </nav>
                     </div>
                 </div>
-                <div className="w-full md:w-5/6 p-4 border border-8 border-purple-default">
+                <div className="w-full md:w-5/6 border border-8 border-purple-default">
                     {children}
                 </div>
             </div>

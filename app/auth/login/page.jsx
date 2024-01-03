@@ -19,7 +19,7 @@ const Login = () => {
     return (
         <>
             <div className='flex items-center justify-center h-screen'>
-                <div className="bg-white border shadow-sm rounded-xl dark:bg-slate-900 dark:border-gray-700 dark:shadow-slate-700/[.7] p-4 w-1/2 h-5/6">
+                <div className="bg-white border shadow-sm rounded-xl dark:bg-slate-900 dark:border-gray-700 dark:shadow-slate-700/[.7] p-4 w-1/2 ">
                     <div className='flex flex-col gap-16'>
                         <section className='flex flex-col items-center'>
                             <div className=" overflow-y-auto p-4 md:p-5 ">
