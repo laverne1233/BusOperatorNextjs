@@ -7,7 +7,12 @@ const nextConfig = {
         return [
             {
                 source: '/',
-                destination: '/bus-operator',
+                destination: '/bus-operator/dashboard',
+                permanent: true,
+            },
+            {
+                source: '/bus-operator',
+                destination: '/bus-operator/dashboard',
                 permanent: true,
             },
         ]
