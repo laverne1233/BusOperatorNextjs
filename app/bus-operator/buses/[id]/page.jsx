@@ -72,7 +72,7 @@ export default function BusUpdate({ params }) {
         })
         const responseData = await response.json()
 
-        window.location.replace(redirectToRoute('/bus'))
+        window.location.replace(redirectToRoute('/buses'))
     }
 
     return (

@@ -52,11 +52,11 @@ export default function Bus() {
                 <p className="text-base">Add bus and their routes</p>
             </div>
             <div className="flex flex-row w-full">
-                <Link href="/bus-operator/bus" className="w-full text-center">
+                <Link href="/bus-operator/buses" className="w-full text-center">
                     <p>Bus</p>
                     <hr className="border border-gray-500 w-full" style={{ height: '2px' }} />
                 </Link>
-                <Link href="/bus-operator/bus/track" className="w-full text-center">
+                <Link href="/bus-operator/buses/track" className="w-full text-center">
                     <p>Bus Track</p>
                     <hr className="border border-gray-300 w-full" style={{ height: '1px' }} />
                 </Link>
@@ -109,7 +109,7 @@ export default function Bus() {
                                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">{item.end_point}</td>
                                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">{item.plate_number}</td>
                                                 <td className="px-6 py-4 whitespace-nowrap text-end text-sm font-medium flex flex-row gap-2 justify-end">
-                                                    <Link href={`/bus-operator/bus/${item.id}/update`} className="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-blue-600 hover:text-blue-800 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-400 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">Edit</Link>
+                                                    <Link href={`/bus-operator/bus/${item.id}`} className="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-blue-600 hover:text-blue-800 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-400 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">Edit</Link>
                                                     <button onClick={(e => handleDelete(item.id))} type="button" className="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-blue-600 hover:text-blue-800 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-400 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">Delete</button>
                                                 </td>
                                             </tr>
