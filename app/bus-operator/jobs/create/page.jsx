@@ -3,54 +3,34 @@
 export default function JobCreate() {
     return (
         <>
-            hi create
+            <Heading title={'Manage Jobs'} description={'Create new job opening'} />
             <DropZoneComponent />
         </>
     )
 }
 
+
 import React, { useState, useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import Image from 'next/image';
+import Heading from '@/components/Heading';
 
 const DropZoneComponent = () => {
-    const [uploadedImage, setUploadedImage] = useState(null);
+    const [selectedImage, setSelectedImage] = useState(null);
 
-    const onDrop = useCallback(acceptedFiles => {
-        const file = acceptedFiles[0];
-        const reader = new FileReader();
-
-        reader.onload = () => {
-            setUploadedImage(reader.result);
-        };
-
-        reader.readAsDataURL(file);
-    }, []);
-
-    const { getRootProps, getInputProps, isDragActive } = useDropzone({
-        onDrop,
-        accept: 'image/*',
-    });
+    const handleImageChange = (e) => {
+        const file = e.target.files[0];
+        if (file && file.type.startsWith('image/')) {
+            setSelectedImage(URL.createObjectURL(file));
+        } else {
+            alert('Please select a valid image file.');
+        }
+    };
 
     return (
-        <div className="bg-white rounded-lg p-8 text-center">
-            <div
-                {...getRootProps()}
-                className={`border-dashed border-4 border-gray-200 py-12 w-full ${isDragActive ? 'bg-gray-100' : ''
-                    }`}
-            >
-                <input {...getInputProps()} />
-                {isDragActive ? (
-                    <p>Drop the files here ...</p>
-                ) : (
-                    <p>Drag 'n' drop some files here, or click to select files</p>
-                )}
-            </div>
-            {uploadedImage && (
-                <div className="mt-4">
-                    <Image src={uploadedImage} alt="Uploaded Image" width={200} height={200} />
-                </div>
-            )}
+        <div className="App">
+            <input type="file" onChange={handleImageChange} />
+            {selectedImage && <img src={selectedImage} alt="Selected" style={{ width: '300px', height: '300px' }} />}
         </div>
     );
 };

@@ -17,12 +17,12 @@ const Login = () => {
                 'Content-Type': 'application/json'
             },
             method: 'POST',
-            body: JSON.stringify({ email, password })
+            body: JSON.stringify({ email, password, role: 'bus-operator' })
         })
 
         const result = await response.json()
 
-        if (!response.success) {
+        if (!result.success) {
             setErrorMessage(result.message.replace('_', ' '))
             return
         }
