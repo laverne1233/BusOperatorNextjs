@@ -22,3 +22,11 @@ export const useUserStore = create(
         },
     )
 )
+
+export const useJobStore = create(
+    (set) => ({
+        job: initialState,
+        setJob: (newJob) => set((state) => ({ job: { ...state.job, ...newJob } })),
+        reset: () => set(() => ({ job: initialState }))
+    })
+)

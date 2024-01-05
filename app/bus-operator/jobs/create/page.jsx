@@ -1,18 +1,57 @@
 'use client'
 
+import FormInputGroup from "@/components/FormInputGroup"
 import Heading from "@/components/Heading"
+import TextAreaGroup from "@/components/TextAreaGroup"
+import { useJobStore, useUserStore } from "@/store"
+import { redirectToRoute } from "@/utils/routing"
+import Link from "next/link"
+import { useEffect, useState } from "react"
 
 export default function JobCreate() {
+    const jobStore = useJobStore()
+    const userStore = useUserStore()
+    const [organization, setOrganization] = useState({})
+
+    useEffect(() => {
+        jobStore.reset()
+        fetch(process.env.BE_URL + `/auth/me`, {
+            headers: {
+                Authorization: `Bearer ${userStore.user?.token}`,
+                'Content-Type': 'application/json',
+            },
+            method: 'GET'
+        })
+            .then(response => response.json())
+            .then(result => {
+                if (!result.success) {
+                    window.location.replace('/404')
+                }
+                setOrganization(result.data.organization)
+            })
+            .catch(error => console.error(error.message))
+    }, [])
+
+    const handleChangeEvent = (e) => {
+        jobStore.setJob({ [e.target.name]: e.target.value })
+    }
+
     return (
         <>
-            <Heading title={'Manage Jobs'} description={'Create new job opening'} />
-            <TopForm />
-            <Tabs />
+            <div className="flex flex-row w-full">
+                <Heading title={'Manage Jobs'} description={'Create new job opening'} />
+                <div className="ml-auto flex flex-row p-8 gap-4">
+                    <Link href={redirectToRoute('/jobs')} className="bg-white-500 text-black border border-black rounded-lg py-4 px-8  w-full">Cancel</Link>
+                    <button className="bg-purple-default text-white border border-white rounded-lg py-1 px-10  w-full">Save</button>
+                </div>
+            </div>
+            <TopForm companyName={organization.company_name} companyAddress={organization.company_address} onChangeEvent={handleChangeEvent} />
+            <Tabs companyDescription={organization.company_description} onChangeEvent={handleChangeEvent} />
         </>
     )
 }
 
-const TopForm = () => {
+const TopForm = ({ companyName, companyAddress, onChangeEvent }) => {
     const fields = [
         {
             label: 'Title',
@@ -25,17 +64,19 @@ const TopForm = () => {
             tagFor: 'company',
             type: 'text',
             placeholder: '',
+            defaultValue: companyName
         },
         {
             label: 'Company Address',
             tagFor: 'company_address',
             type: 'text',
             placeholder: '',
+            defaultValue: companyAddress
         },
         {
             label: 'Salary',
             tagFor: 'salary',
-            type: 'number',
+            type: 'text',
             placeholder: '',
         },
     ]
@@ -45,7 +86,15 @@ const TopForm = () => {
                 <div className="flex flex-row gap-2 w-full">
                     <section className="flex flex-col gap-3 justify-center w-4/6 p-4">
                         {fields.map((item, key) => (
-                            <FormInputGroup key={key} label={item.label} tagFor={item.tagFor} type={item.type} placeholder={item.placeholder} />
+                            <FormInputGroup
+                                key={key}
+                                label={item.label}
+                                tagFor={item.tagFor}
+                                type={item.type}
+                                placeholder={item.placeholder}
+                                defaultValue={item?.defaultValue}
+                                onchangeEvent={onChangeEvent}
+                            />
                         ))}
                     </section>
                 </div>
@@ -54,7 +103,7 @@ const TopForm = () => {
     )
 }
 
-const Tabs = () => {
+const Tabs = ({ companyDescription, onChangeEvent }) => {
     return (
         <>
             <div className="border-b border-gray-200 dark:border-gray-700">
@@ -77,26 +126,34 @@ const Tabs = () => {
                         label={'Job Highlights'}
                         tagFor={'job_highlights'}
                         rows={5}
+                        onChangeEvent={onChangeEvent}
                     />
                     <TextAreaGroup
                         label={'Qualifications'}
                         tagFor={'qualification'}
                         rows={5}
+                        onChangeEvent={onChangeEvent}
                     />
                     <TextAreaGroup
                         label={'How to apply'}
                         tagFor={'how_to_apply'}
                         rows={5}
+                        onChangeEvent={onChangeEvent}
                     />
                 </div>
                 <div id="horizontal-alignment-2" className="hidden" role="tabpanel" aria-labelledby="horizontal-alignment-item-2">
-                    <p className="text-gray-500 dark:text-gray-400">
-                        This is the <em className="font-semibold text-gray-800 dark:text-gray-200">second</em> item's tab body.
-                    </p>
+                    <TextAreaGroup
+                        label={''}
+                        tagFor={'about_the_company'}
+                        rows={12}
+                        defaultValue={companyDescription}
+                        onChangeEvent={onChangeEvent}
+                    >
+                    </TextAreaGroup>
                 </div>
                 <div id="horizontal-alignment-3" className="hidden" role="tabpanel" aria-labelledby="horizontal-alignment-item-3">
                     <p className="text-gray-500 dark:text-gray-400">
-                        This is the <em className="font-semibold text-gray-800 dark:text-gray-200">third</em> item's tab body.
+                        Coming soon.
                     </p>
                 </div>
             </div>
@@ -104,30 +161,5 @@ const Tabs = () => {
     )
 }
 
-const FormInputGroup = ({ label, tagFor, type, placeholder, parentClass, labelClass, inputClass }) => {
-    return (
-        <>
-            <div className={parentClass || "flex flex-row gap-2 items-center"}>
-                <label htmlFor={tagFor} className={labelClass || "text-base font-bold"}>{label}</label>
-                <input type={type} name={tagFor} id="input-label" className={inputClass || "py-3 px-4 ml-auto block w-3/4 border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600"} placeholder={placeholder} />
-            </div>
-        </>
-    )
-}
 
-const TextAreaGroup = ({ label, tagFor, cols, rows, placeholder, parentClass, labelClass, inputClass }) => {
-    return (
-        <>
-            <div className={parentClass || "flex flex-col gap-2"}>
-                <label htmlFor={tagFor} className={labelClass || "text-base font-bold"}>{label}</label>
-                <textarea
-                    name={tagFor}
-                    id={tagFor}
-                    cols={cols}
-                    rows={rows}
-                    className={inputClass || "py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600"}
-                ></textarea>
-            </div>
-        </>
-    )
-}
+
