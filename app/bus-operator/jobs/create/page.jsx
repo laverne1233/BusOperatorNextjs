@@ -148,8 +148,7 @@ const Tabs = ({ companyDescription, onChangeEvent }) => {
                         rows={12}
                         defaultValue={companyDescription}
                         onChangeEvent={onChangeEvent}
-                    >
-                    </TextAreaGroup>
+                    />
                 </div>
                 <div id="horizontal-alignment-3" className="hidden" role="tabpanel" aria-labelledby="horizontal-alignment-item-3">
                     <p className="text-gray-500 dark:text-gray-400">

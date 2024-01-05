@@ -83,9 +83,9 @@ const Card = ({ id, title, company_name, company_address, salary, created_at }) 
             <div className="flex flex-col bg-white border shadow-sm rounded-xl dark:bg-slate-900 dark:border-gray-700 dark:shadow-slate-700/[.7] h-48">
                 <div className="p-4 md:p-5 flex flex-col h-full">
                     <div className="flex flex-col gap-1">
-                        <h3 className="text-xl font-bold text-gray-800 dark:text-white">
+                        <Link href={redirectToRoute(`/jobs/${id}`)} className="text-xl font-bold text-gray-800 dark:text-white">
                             {title || 'Title'}
-                        </h3>
+                        </Link>
                         <p className="text-gray-500 dark:text-gray-400 text-sm">
                             {company_name || 'Company Name'}
                         </p>
