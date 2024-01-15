@@ -13,6 +13,7 @@ export default function JobCreate() {
     const userStore = useUserStore()
     const [organization, setOrganization] = useState({})
     const [questions, setQuestions] = useState([])
+    const [errors, setErrors] = useState({})
 
     useEffect(() => {
         jobStore.reset()
@@ -62,6 +63,12 @@ export default function JobCreate() {
         })
 
         const result = await response.json()
+        if (!result.success) {
+            setErrors(result.errors)
+            return
+        }
+
+        window.location.replace(redirectToRoute('/jobs'))
     }
 
     return (
@@ -158,7 +165,7 @@ const Tabs = ({ companyDescription, onChangeEvent, questions, questionOnChangeEv
                     />
                     <TextAreaGroup
                         label={'Qualifications'}
-                        tagFor={'qualification'}
+                        tagFor={'qualifications'}
                         rows={5}
                         onChangeEvent={onChangeEvent}
                     />

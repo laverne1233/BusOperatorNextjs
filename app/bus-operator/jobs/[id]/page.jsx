@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 export default function JobShow({ params }) {
     const userStore = useUserStore()
     const [job, setJob] = useState({})
+    const [questions, setQuestions] = useState([])
 
     useEffect(() => {
         fetch(process.env.BE_URL + `/jobs/${params.id}`, {
@@ -24,8 +25,8 @@ export default function JobShow({ params }) {
                 if (!result.success) {
                     window.location.replace('/404')
                 }
-                console.log(result.data)
                 setJob(result.data)
+                setQuestions(result.data.questions)
             })
             .catch(error => console.error(error.message))
     }, [])
@@ -80,14 +81,14 @@ export default function JobShow({ params }) {
                     <p className="text-xs mt-5">Posted: {greaterThanOrEqualDate(job?.created_at, job?.updated_at) ? convertTimestamp(job?.created_at) : convertTimestamp(job?.updated_at)}</p>
                 </div>
             </div>
-            <Tabs job={job} />
+            <Tabs job={job} questions={questions} />
 
         </>
     )
 }
 
 
-const Tabs = ({ job }) => {
+const Tabs = ({ job, questions }) => {
     return (
         <>
             <div className="border-b border-gray-200 dark:border-gray-700">
@@ -138,11 +139,28 @@ const Tabs = ({ job }) => {
                     />
                 </div>
                 <div id="horizontal-alignment-3" className="hidden" role="tabpanel" aria-labelledby="horizontal-alignment-item-3">
-                    <p className="text-gray-500 dark:text-gray-400">
-                        Coming soon.
-                    </p>
+                    {questions.map((item, index) => (<QuestionField key={item} defaultValue={item.description} index={index} />))}
                 </div>
             </div>
         </>
+    )
+}
+
+const QuestionField = ({ index, tagFor, placeholder, inputClass, defaultValue, rest, onchangeEvent }) => {
+    return (
+        <div className="flex flex-row gap-3 justify-center items-center">
+            {index + 1}
+            <input
+                type={'text'}
+                name={tagFor}
+                id={tagFor}
+                className={inputClass || "py-3 px-4 w-full block w-3/4 border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 "}
+                placeholder={placeholder}
+                onChange={(event) => onchangeEvent(event, index)}
+                defaultValue={defaultValue}
+                {...rest}
+                readOnly
+            />
+        </div>
     )
 }
